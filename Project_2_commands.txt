@@ -1,0 +1,30 @@
+
+#show assigned IP addresses
+dump
+
+#show 192.168.2.10 and 192.168.2.30 cannot ping each other
+#show 192.168.2.20 and 192.168.2.40 cannot ping each other
+pingall
+
+#show that all http traffic from 192.168.2.20 is blocked
+h1 hping3 -p 80 -c 5 h2
+h3 hping3 -p 80 -c 5 h2
+h4 hping3 -p 80 -c 5 h2
+
+#show all traffic between h2 and h4 is blocked
+h2 hping3 -c 5 h4
+h2 hping3 -c 5 -0 h4
+h2 hping3 -c 5 -1 h4
+h2 hping3 -c 5 -2 h4
+h4 hping3 -c 5 h2
+h4 hping3 -c 5 -0 h2
+h4 hping3 -c 5 -1 h2
+h4 hping3 -c 5 -2 h2
+
+#show tcp traffic from 192.168.2.10 and 192.168.2.20 is blocked
+h1 hping3 -c 5 h2
+h2 hping3 -c 5 h1
+
+#show udp traffic from 192.168.2.10 and 192.168.2.20 is blocked
+h1 hping3 -c 5 -2 h2
+h2 hping3 -c 5 -2 h1
